@@ -1,38 +1,39 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import { Heading } from '../components/Heading';
 import { Subheading } from '../components/Subheading';
 import { InputBox } from '../components/InputBox';
 import axios from 'axios';
 import { Button } from '../components/Button';
-import { useNavigate } from 'react-router-dom';
 
 export const Signup = () => {
-    const [email, SetEmail] = useState('');
-    const [password, SetPassword] = useState('');
-    const [firstname, SetFirstName] = useState('');
-    const [lastname, SetLastName] = useState('');
-    const [isLoading, SetIsLoading] = useState(false);
-    const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleSignup = async () => {
-        if (email === '' || password === '' || firstname === '' || lastname === '') {
-            alert('please fill all the fields');
+        if (email === '' || password === '' || firstName === '' || lastName === '') {
+            alert('Please fill all the fields');
             return;
         }
-        console.log(email,password,firstname,lastname)
+
+        setLoading(true);
         try {
-            SetIsLoading(true);
             await axios.post('http://localhost:3000/api/v1/signup', {
                 email,
                 password,
-                firstname,
-                lastname
+                firstname: firstName,
+                lastname: lastName
             });
-            navigate('/signin')
-        } catch (error) {
+            
+            alert('Account created successfully! Please sign in.');
+            window.location.href = '/signin';
+        } catch (error: any) {
             console.log(error);
+            alert(error.response?.data?.message || 'Failed to create account');
         } finally {
-            SetIsLoading(false);
+            setLoading(false);
         }
     }
 
@@ -49,39 +50,44 @@ export const Signup = () => {
                 <div className="space-y-6">
                     <div className="grid grid-cols-2 gap-4">
                         <InputBox 
-                            placeholder={'chandan'} 
+                            placeholder={'John'} 
                             label={'First Name'} 
                             onChange={(e) => {
-                                SetFirstName(e.target.value);
+                                setFirstName(e.target.value);
                             }}
                         />
                         <InputBox 
-                            placeholder={'C R'} 
+                            placeholder={'Doe'} 
                             label={'Last Name'} 
                             onChange={(e) => {
-                                SetLastName(e.target.value);
+                                setLastName(e.target.value);
                             }}
                         />
                     </div>
 
                     <InputBox 
-                        placeholder={'cr@example.com'} 
+                        placeholder={'john@example.com'} 
                         label={'Email'} 
+                        type={'email'}
                         onChange={(e) => {
-                            SetEmail(e.target.value);
+                            setEmail(e.target.value);
                         }}
                     />
 
                     <InputBox 
                         placeholder={'••••••••'} 
                         label={'Password'} 
+                        type={'password'}
                         onChange={(e) => {
-                            SetPassword(e.target.value);
+                            setPassword(e.target.value);
                         }}
                     />
 
                     <div className="pt-4">
-                        <Button label={isLoading ? 'Creating Account...' : 'Create Account'} onClick={handleSignup} />
+                        <Button 
+                            label={loading ? 'Creating Account...' : 'Create Account'} 
+                            onClick={handleSignup} 
+                        />
                     </div>
 
                     <div className="text-center pt-4">

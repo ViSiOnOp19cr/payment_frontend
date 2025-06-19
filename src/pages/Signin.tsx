@@ -4,13 +4,11 @@ import { Subheading } from '../components/Subheading';
 import { InputBox } from '../components/InputBox';
 import axios from 'axios';
 import { Button } from '../components/Button';
-import { useNavigate } from 'react-router-dom';
 
 export const Signin = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const navigate = useNavigate();
 
     const handleSignin = async () => {
         if (email === '' || password === '') {
@@ -24,12 +22,44 @@ export const Signin = () => {
                 email,
                 password
             });
-            const token = response.data.token;
-            localStorage.setItem('token',token);
-            navigate('/')
-        } catch (error) {
+            
+            // Store token
+            localStorage.setItem('token', response.data.token);
+            
+            // Fetch user details using the token
+            try {
+                const userResponse = await axios.get('http://localhost:3000/api/v1/bulk?filter=', {
+                    headers: {
+                        Authorization: response.data.token
+                    }
+                });
+                
+                // Find current user's details from the response
+                const currentUser = userResponse.data.user.find((user: any) => user.email === email);
+                if (currentUser) {
+                    localStorage.setItem('userDetails', JSON.stringify({
+                        email: currentUser.email,
+                        firstName: currentUser.firstname,
+                        lastName: currentUser.lastname,
+                        id: currentUser.id
+                    }));
+                }
+            } catch (userError) {
+                console.log('Error fetching user details:', userError);
+                // Fallback to basic user info
+                localStorage.setItem('userDetails', JSON.stringify({
+                    email: email,
+                    firstName: 'User',
+                    lastName: ''
+                }));
+            }
+            
+            alert('Signin successful!');
+            window.location.href = '/dashboard';
+            
+        } catch (error: any) {
             console.log('Signin error:', error);
-            alert('Invalid credentials. Please try again.');
+            alert(error.response?.data?.message || 'Invalid credentials. Please try again.');
         } finally {
             setIsLoading(false);
         }
@@ -49,6 +79,7 @@ export const Signin = () => {
                     <InputBox 
                         placeholder={'john@example.com'} 
                         label={'Email'} 
+                        type={'email'}
                         onChange={(e) => {
                             setEmail(e.target.value);
                         }}
@@ -57,6 +88,7 @@ export const Signin = () => {
                     <InputBox 
                         placeholder={'••••••••'} 
                         label={'Password'} 
+                        type={'password'}
                         onChange={(e) => {
                             setPassword(e.target.value);
                         }}

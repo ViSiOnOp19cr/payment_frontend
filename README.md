@@ -1,54 +1,116 @@
-# React + TypeScript + Vite
+# PayApp - Digital Wallet Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A beautiful, modern payment application built with React, TypeScript, and Tailwind CSS.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 🔐 Authentication
+- **Sign Up**: Create new account with email and password
+- **Sign In**: Secure login with JWT token authentication
+- **Profile Management**: Update personal information
 
-## Expanding the ESLint configuration
+### 💰 Payment Features
+- **Dashboard**: View account balance and quick actions
+- **Send Money**: Transfer funds to other users
+- **User Search**: Find recipients by name
+- **Balance Display**: Real-time balance updates
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 🎨 Beautiful UI/UX
+- Modern gradient designs
+- Responsive layout for all devices
+- Smooth animations and transitions
+- Intuitive user interface
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## Pages
+
+1. **Signup** (`/signup`) - Create new account
+2. **Signin** (`/signin`) - Login to existing account
+3. **Dashboard** (`/` or `/dashboard`) - Main overview page
+4. **Send Money** (`/send`) - Transfer money to other users
+5. **Profile** (`/profile`) - Manage account settings
+
+## Tech Stack
+
+- **Frontend**: React 18 + TypeScript
+- **Styling**: Tailwind CSS
+- **Routing**: React Router v6
+- **HTTP Client**: Axios
+- **Icons**: Heroicons (SVG)
+- **Build Tool**: Vite
+
+## API Integration
+
+The frontend connects to the backend API with the following endpoints:
+
+- `POST /api/v1/signup` - User registration
+- `POST /api/v1/login` - User authentication
+- `GET /api/v1/balance` - Get account balance
+- `POST /api/v1/transaction` - Transfer money
+- `GET /api/v1/bulk` - Search users
+- `POST /api/v1/update` - Update profile
+
+## Getting Started
+
+1. Install dependencies:
+```bash
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+2. Start the development server:
+```bash
+npm run dev
 ```
+
+3. Open your browser to `http://localhost:5173`
+
+## Authentication Flow
+
+1. Users must sign up with email, password, first name, and last name
+2. After successful signup, users are redirected to signin
+3. Upon signin, JWT token is stored in localStorage
+4. Protected routes check for valid token
+5. Users can access dashboard, send money, and profile features
+
+## Design Philosophy
+
+- **Clean & Modern**: Minimalist design with focus on usability
+- **Responsive**: Works seamlessly on desktop, tablet, and mobile
+- **Accessible**: Proper contrast ratios and keyboard navigation
+- **Fast**: Optimized performance with modern React patterns
+
+## Component Structure
+
+```
+src/
+├── components/          # Reusable UI components
+│   ├── Button.tsx      # Enhanced button with gradients
+│   ├── Heading.tsx     # Page headings
+│   ├── InputBox.tsx    # Form inputs with validation
+│   └── Subheading.tsx  # Subtitle component
+├── pages/              # Route components  
+│   ├── Dashboard.tsx   # Main dashboard
+│   ├── Profile.tsx     # User profile management
+│   ├── SendMoney.tsx   # Money transfer flow
+│   ├── Signin.tsx      # Authentication
+│   └── Signup.tsx      # User registration
+└── App.tsx            # Main app with routing
+```
+
+## Color Scheme
+
+- **Primary**: Blue to Purple gradients
+- **Secondary**: Green for money actions
+- **Neutral**: Gray tones for text and backgrounds
+- **Accent**: Pink and purple for profile sections
+
+## Security Features
+
+- Password fields are properly masked
+- JWT tokens stored securely in localStorage  
+- API calls include proper authorization headers
+- Form validation on all inputs
+- Error handling for failed requests
+
+---
+
+Built with ❤️ using modern web technologies
